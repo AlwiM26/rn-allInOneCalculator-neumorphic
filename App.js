@@ -3,7 +3,18 @@ import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from "react-nati
 
 const App = () => {
 
-  const [n, setN] = useState('69 * 420');
+  const [n, setN] = useState('');
+  const op = [
+    [ {text: 'AC'}, {text: 'x'}, {text: '%'}, {text: ' / '} ],
+    [ {text: '7'}, {text: '8'}, {text: '9'}, {text: ' * '} ],
+    [ {text: '4'}, {text: '5'}, {text: '6'}, {text: ' - '} ],
+    [ {text: '1'}, {text: '2'}, {text: '3'}, {text: ' + '} ],
+    [ {text: '+/-'}, {text: '0'}, {text: '.'}, {text: '='} ],
+  ];  
+
+  const handleOperator = (operator) => {
+    setN(n + operator);
+  }
 
   return (
     <View style={styles.mainContainer}>
@@ -15,65 +26,19 @@ const App = () => {
       {/* Container for all the operator button */}
       <View style={styles.operatorContainer}>
 
-        <View style={styles.column}>
-          <TouchableOpacity style={styles.btnOperator}>
-            <Text style={styles.textOperator}>AC</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btnOperator}>
-            <Text style={styles.textOperator}>AC</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btnOperator}>
-            <Text style={styles.textOperator}>AC</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btnOperator}>
-            <Text style={styles.textOperator}>AC</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.column}>
-          <TouchableOpacity style={styles.btnOperator}>
-            <Text style={styles.textOperator}>AC</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btnOperator}>
-            <Text style={styles.textOperator}>AC</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btnOperator}>
-            <Text style={styles.textOperator}>AC</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btnOperator}>
-            <Text style={styles.textOperator}>AC</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.column}>
-          <TouchableOpacity style={styles.btnOperator}>
-            <Text style={styles.textOperator}>AC</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btnOperator}>
-            <Text style={styles.textOperator}>AC</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btnOperator}>
-            <Text style={styles.textOperator}>AC</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btnOperator}>
-            <Text style={styles.textOperator}>AC</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.column}>
-          <TouchableOpacity style={styles.btnOperator}>
-            <Text style={styles.textOperator}>AC</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btnOperator}>
-            <Text style={styles.textOperator}>AC</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btnOperator}>
-            <Text style={styles.textOperator}>AC</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btnOperator}>
-            <Text style={styles.textOperator}>AC</Text>
-          </TouchableOpacity>
-        </View>
+        {op.map((item, id) => {
+          return (
+          <View style={styles.row} key={id}>
+            {item.map((operator, id) => {
+              return (          
+                <TouchableOpacity style={styles.btnOperator} onPress={() => handleOperator(operator.text)} key={id}>
+                  <Text style={styles.textOperator}>{operator.text}</Text>
+                </TouchableOpacity>
+              )
+            })}
+          </View>
+          )
+        })}
 
       </View>
     </View>
@@ -97,15 +62,16 @@ const styles = StyleSheet.create({
   operatorContainer: {
     flex: 1,
     backgroundColor: 'green',
-    flexDirection: 'row',
+    flexDirection: 'column',
   },
-  column: {
+  row: {
     flex: 1,
     justifyContent: 'space-around',
+    flexDirection: 'row'
   },
   btnOperator: {
     flex: 1,
-    backgroundColor: 'blue',
+    // backgroundColor: 'blue',
     alignItems: 'center',
     justifyContent: 'space-around',
     margin: 10,
