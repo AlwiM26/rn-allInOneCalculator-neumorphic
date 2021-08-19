@@ -20,11 +20,12 @@ const App = () => {
       case 'clear': 
         setHavePoint(false);
         setN('0');
+        setResult('');
         break;
       case 'backspace': 
         return handleBackspace();
       case 'percent': 
-        n !== '0' ? setN(`= ${eval(n) / 100}`) : setN('0');
+        n !== '0' ? setResult(`= ${eval(n) / 100}`) : setN('0');
         break;
       case 'equal':
         setHavePoint(false);
@@ -71,10 +72,16 @@ const App = () => {
 
   const handleBackspace = () => {
     setHavePoint(false);
-    if ( n[0] === '=' || n.length <= 1) {
+    if ( result[0] === '=') {
       setN('0');
+      setResult('');
     } else {
-      setN(n.substring(0, n.length - 1));
+      if (n.length <= 1) {
+        setResult('');
+        setN('0');
+      } else {
+        setN(n.substring(0, n.length - 1));
+      }
     }
   }
 
@@ -82,7 +89,7 @@ const App = () => {
     <View style={styles.mainContainer}>
       {/* Container for the number input */}
       <View style={styles.numContainer}>
-        <Text style={styles.numText}>{n}</Text>
+        <Text style={result !== '' ? styles.numTextAfter : styles.numText}>{n}</Text>
         {!result || <Text style={styles.resultText}>{result}</Text>}
       </View>      
 
@@ -123,10 +130,13 @@ const styles = StyleSheet.create({
     fontSize: 40,    
     padding: 15
   },
-  resultText: {
+  numTextAfter: {
     fontSize: 25,
     padding: 15,
-    color: '#808080',
+  }, 
+  resultText: {
+    fontSize: 40,
+    padding: 15,
   },  
   operatorContainer: {
     flex: 1,
