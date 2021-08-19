@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 const App = () => {
 
   const [n, setN] = useState('0');
+  const [result, setResult] = useState('');
   const [havePoint, setHavePoint] = useState(false);
   const op = [
     [ {text: 'AC', type: 'clear'}, {text:  <Ionicons name="md-backspace-outline" size={25} color="#F85E18" />, type: 'backspace'}, {text: '%', type: 'percent'}, {text: '/', type: 'operator'} ],
@@ -14,7 +15,7 @@ const App = () => {
     [ {text: '0', type: 'number'}, {text: '.', type: 'point'}, {text: '=', type: 'equal'} ],
   ];  
 
-  const handleOperator = (type, val) => {
+  const handleTap = (type, val) => {
     switch (type) {
       case 'clear': 
         setHavePoint(false);
@@ -27,10 +28,7 @@ const App = () => {
         break;
       case 'equal':
         setHavePoint(false);
-        setN(`= ${eval(n)}`);
-        break;
-      case 'posneg': 
-        setN(`${eval(n * -1)}`);
+        setResult(`= ${eval(n)}`);
         break;
       case 'point':
         if (!havePoint) {
@@ -39,13 +37,8 @@ const App = () => {
         }
         break;
       case 'operator': 
-      setHavePoint(false);
-        if (val !== n[n.length - 1]) {
-          setN(n + val);
-        } else {
-          setN(`${n}(${val}`);
-        }
-        break;
+        setHavePoint(false);
+        return handleOperator(val);
       case 'number':
         if (n === '0') { 
           setN(val);
@@ -53,6 +46,26 @@ const App = () => {
           setN(n + val);
         }
         break;
+    }
+  }
+
+  handleOperator = (val) => {
+    if (n[n.length - 1] !== '*' && n[n.length - 1] !=='/' && n[n.length - 1] !=='+' && n[n.length - 1] !=='-' ) {
+      if (val !== n[n.length - 1]) {
+        setN(n + val);
+      } else {
+        return;
+      }
+    } else {
+      if (val !== n[n.length - 1]) {
+        if (val !== '/' && val !== '*') {
+          setN(n + val);
+        } else {
+          return;
+        }
+      } else {
+        return;
+      }
     }
   }
 
@@ -70,6 +83,7 @@ const App = () => {
       {/* Container for the number input */}
       <View style={styles.numContainer}>
         <Text style={styles.numText}>{n}</Text>
+        {!result || <Text style={styles.resultText}>{result}</Text>}
       </View>      
 
       <View style={{borderBottomColor: '#dedee0', borderBottomWidth: 1, marginHorizontal: 10}} />
@@ -82,7 +96,7 @@ const App = () => {
           <View style={styles.row} key={id}>
             {item.map((operator, id) => {
               return (          
-                <TouchableOpacity style={operator.type === 'equal' ? styles.btnEqual : styles.btnOperator} onPress={() => handleOperator(operator.type, operator.text)} key={id}>
+                <TouchableOpacity style={operator.type === 'equal' ? styles.btnEqual : styles.btnOperator} onPress={() => handleTap(operator.type, operator.text)} key={id}>
                   <Text style={{fontSize: 25, color: operator.type === 'number' ? 'black' : '#F85E18'}}>{operator.text}</Text>
                 </TouchableOpacity>
               )
@@ -109,6 +123,11 @@ const styles = StyleSheet.create({
     fontSize: 40,    
     padding: 15
   },
+  resultText: {
+    fontSize: 25,
+    padding: 15,
+    color: '#808080',
+  },  
   operatorContainer: {
     flex: 1,
     flexDirection: 'column',
