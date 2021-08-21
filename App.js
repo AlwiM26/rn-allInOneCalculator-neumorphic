@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 
 const App = () => {
@@ -28,8 +28,12 @@ const App = () => {
         n !== '0' ? setResult(`= ${eval(n) / 100}`) : setN('0');
         break;
       case 'equal':
-        setHavePoint(false);
-        setResult(`= ${eval(n)}`);
+        if (n[n.length - 1] !== '*' && n[n.length - 1] !=='/' && n[n.length - 1] !=='+' && n[n.length - 1] !=='-'){
+          setHavePoint(false);
+          setResult(`= ${eval(n)}`);
+        } else {
+          return;
+        }
         break;
       case 'point':
         if (!havePoint) {
@@ -51,7 +55,7 @@ const App = () => {
   }
 
   handleOperator = (val) => {
-    if (n[n.length - 1] !== '*' && n[n.length - 1] !=='/' && n[n.length - 1] !=='+' && n[n.length - 1] !=='-' ) {
+    if (n[n.length - 1] !== '*' && n[n.length - 1] !=='/' && n[n.length - 1] !=='+' && n[n.length - 1] !=='-') {
       if (val !== n[n.length - 1]) {
         setN(n + val);
       } else {
@@ -93,7 +97,7 @@ const App = () => {
         {!result || <Text style={styles.resultText}>{result}</Text>}
       </View>      
 
-      <View style={{borderBottomColor: '#dedee0', borderBottomWidth: 1, marginHorizontal: 10}} />
+      <View style={{borderBottomColor: '#999ea7', borderBottomWidth: 2, marginHorizontal: 10}} />
       
       {/* Container for all the operator button */}
       <View style={styles.operatorContainer}>
@@ -103,9 +107,11 @@ const App = () => {
           <View style={styles.row} key={id}>
             {item.map((operator, id) => {
               return (          
-                <TouchableOpacity style={operator.type === 'equal' ? styles.btnEqual : styles.btnOperator} onPress={() => handleTap(operator.type, operator.text)} key={id}>
-                  <Text style={{fontSize: 25, color: operator.type === 'number' ? 'black' : '#F85E18'}}>{operator.text}</Text>
-                </TouchableOpacity>
+                <View style={operator.type === 'equal' ? styles.outerBtnEqual : styles.outerBtn} key={id}>
+                  <TouchableOpacity style={styles.btnOperator} onPress={() => handleTap(operator.type, operator.text)}>
+                    <Text style={{fontSize: 25, color: operator.type === 'number' ? 'black' : '#F85E18'}}>{operator.text}</Text>
+                  </TouchableOpacity>
+                </View>
               )
             })}
           </View>
@@ -120,6 +126,7 @@ const App = () => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
+    backgroundColor: '#E2E3Eb',
   },
   numContainer: {
     flex: 1,
@@ -141,31 +148,53 @@ const styles = StyleSheet.create({
   operatorContainer: {
     flex: 1,
     flexDirection: 'column',
-    paddingVertical: 5,
-    paddingHorizontal: 10
+    paddingVertical: 10,
+    paddingHorizontal: 15,
   },
   row: {
     flex: 1,
     justifyContent: 'space-around',
     flexDirection: 'row'
   },
+  outerBtn: {
+    flex: 1,
+    margin: 10,
+    shadowColor: '#b9bac1',
+    shadowOffset: {
+      height: 12, 
+      width: 12,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 12,
+    elevation: 10,
+  },  
+  outerBtnEqual: {
+    flex: 2,
+    margin: 10,
+    borderRadius: 100,
+    shadowColor: '#b9bac1',
+    shadowOffset: {
+      height: 12, 
+      width: 12,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 12,
+    elevation: 10,
+  },  
   btnOperator: {
     flex: 1,
     alignItems: 'center',
+    backgroundColor: '#E2E3Eb',
     justifyContent: 'space-around',
-    margin: 10,
     borderRadius: 100,
-    borderColor: '#DEDEE0',
-    borderWidth: 1,
-  },
-  btnEqual: {
-    flex: 2,
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    margin: 10,
-    borderRadius: 100,
-    borderColor: '#DEDEE0',
-    borderWidth: 1,
+    shadowColor: '#FFFFFF',
+    shadowOffset: {
+      height: -12, 
+      width: -12,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 12,
+    elevation: 10,
   },
 });
 
