@@ -100,26 +100,31 @@ const App = () => {
   };
 
   const handleOperator = (val) => {
-    if (
-      n[n.length - 1] !== "*" &&
-      n[n.length - 1] !== "/" &&
-      n[n.length - 1] !== "+" &&
-      n[n.length - 1] !== "-"
-    ) {
-      if (val !== n[n.length - 1]) {
-        setN(n + val);
-      } else {
-        return;
-      }
+    if (result[0] === "=") {
+      setN(result.substring(1) + val);
+      setResult("");
     } else {
-      if (val !== n[n.length - 1]) {
-        if (val !== "/" && val !== "*") {
+      if (
+        n[n.length - 1] !== "*" &&
+        n[n.length - 1] !== "/" &&
+        n[n.length - 1] !== "+" &&
+        n[n.length - 1] !== "-"
+      ) {
+        if (val !== n[n.length - 1]) {
           setN(n + val);
         } else {
           return;
         }
       } else {
-        return;
+        if (val !== n[n.length - 1]) {
+          if (val !== "/" && val !== "*") {
+            setN(n + val);
+          } else {
+            return;
+          }
+        } else {
+          return;
+        }
       }
     }
   };
