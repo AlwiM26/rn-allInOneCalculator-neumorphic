@@ -17,13 +17,13 @@ const TopBarNavigator = () => {
       <tab.Navigator
         initialRouteName="Home"
         style={{
-          backgroundColor: "black",
           marginTop: insets.top,
         }}
         screenOptions={{
-          tabBarActiveTintColor: "green",
-          tabBarInactiveTintColor: "pink",
           tabBarShowLabel: false,
+          tabBarStyle: {
+            backgroundColor: "#E2E3EB",
+          },
         }}
       >
         <tab.Screen
@@ -31,9 +31,8 @@ const TopBarNavigator = () => {
           component={CalculatorScreen}
           options={{
             tabBarIcon: ({ color }) => (
-              <MaterialIcons name="calculate" size={24} color="#F85E18" />
+              <MaterialIcons name="calculate" size={26} color="#F85E18" />
             ),
-            title: "",
           }}
         />
         <tab.Screen
@@ -41,9 +40,8 @@ const TopBarNavigator = () => {
           component={MoreScreen}
           options={{
             tabBarIcon: () => (
-              <MaterialIcons name="grid-view" size={24} color="#F85E18" />
+              <MaterialIcons name="grid-view" size={26} color="#F85E18" />
             ),
-            title: "",
           }}
         />
       </tab.Navigator>

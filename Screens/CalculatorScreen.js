@@ -215,6 +215,7 @@ const styles = StyleSheet.create({
   numText: {
     fontSize: 40,
     padding: 15,
+    textAlign: "right",
   },
   numTextAfter: {
     fontSize: 25,
@@ -238,6 +239,7 @@ const styles = StyleSheet.create({
   outerBtn: {
     flex: 1,
     margin: 10,
+    // backgroundColor: "green",
     shadowColor: "#b9bac1",
     shadowOffset: {
       height: 12,
@@ -263,7 +265,7 @@ const styles = StyleSheet.create({
   btnOperator: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "#E2E3Eb",
+    backgroundColor: "#E2E3EB",
     justifyContent: "space-around",
     borderRadius: 100,
     shadowColor: "#FFFFFF",
