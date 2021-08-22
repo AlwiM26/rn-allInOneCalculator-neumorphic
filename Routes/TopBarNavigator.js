@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import CalculatorScreen from "../Screens/CalculatorScreen";
 import MoreScreen from "../Screens/MoreScreen";
+import BMIScreen from "../Screens/BMIScreen";
 
 const tab = createMaterialTopTabNavigator();
 
@@ -23,6 +24,9 @@ const TopBarNavigator = () => {
           tabBarShowLabel: false,
           tabBarStyle: {
             backgroundColor: "#E2E3EB",
+          },
+          tabBarIndicatorStyle: {
+            backgroundColor: "#F85E18",
           },
         }}
       >
