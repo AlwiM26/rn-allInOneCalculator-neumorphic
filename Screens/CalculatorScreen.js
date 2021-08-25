@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
   operatorContainer: {
     flex: 1,
     flexDirection: "column",
-    paddingVertical: 10,
+    paddingVertical: 15,
     paddingHorizontal: 15,
   },
   row: {

@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-const MoreScreen = () => {
+const OtherScreen = ({ navigation }) => {
   const calculatorMenu = [
     [
       {
@@ -97,7 +97,7 @@ const MoreScreen = () => {
                   <View style={styles.btn} key={id}>
                     <TouchableOpacity
                       style={styles.btnInner}
-                      onPress={() => console.log("go to " + menu.name)}
+                      onPress={() => navigation.navigate(menu.name)}
                     >
                       {menu.icon}
                       <Text style={styles.btnText}>{menu.name}</Text>
@@ -164,4 +164,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MoreScreen;
+export default OtherScreen;

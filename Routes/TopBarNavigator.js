@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { SafeAreaView } from "react-native";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import CalculatorScreen from "../Screens/CalculatorScreen";
-import MoreScreen from "../Screens/MoreScreen";
-import BMIScreen from "../Screens/BMIScreen";
+import MoreNavigator from "./MoreNavigator";
+import OtherScreen from "../Screens/OtherScreen";
 
 const tab = createMaterialTopTabNavigator();
 
@@ -41,7 +40,7 @@ const TopBarNavigator = () => {
         />
         <tab.Screen
           name="More"
-          component={MoreScreen}
+          component={MoreNavigator}
           options={{
             tabBarIcon: () => (
               <MaterialIcons name="grid-view" size={26} color="#F85E18" />
