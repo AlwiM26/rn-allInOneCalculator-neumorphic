@@ -4,107 +4,73 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const OtherScreen = ({ navigation }) => {
   const calculatorMenu = [
-    [
-      {
-        name: "BMI",
-        icon: (
-          <MaterialCommunityIcons
-            name="scale-bathroom"
-            size={30}
-            color="#686c71"
-          />
-        ),
-      },
-      {
-        name: "Age",
-        icon: <MaterialCommunityIcons name="cake" size={30} color="#686c71" />,
-      },
-      {
-        name: "Length",
-        icon: <MaterialCommunityIcons name="ruler" size={30} color="#686c71" />,
-      },
-    ],
-    [
-      {
-        name: "Mass",
-        icon: (
-          <MaterialCommunityIcons name="weight" size={30} color="#686c71" />
-        ),
-      },
-      {
-        name: "Time",
-        icon: (
-          <MaterialCommunityIcons
-            name="clock-time-three-outline"
-            size={30}
-            color="#686c71"
-          />
-        ),
-      },
-      {
-        name: "Temperature",
-        icon: (
-          <MaterialCommunityIcons
-            name="thermometer"
-            size={30}
-            color="#686c71"
-          />
-        ),
-      },
-    ],
-    [
-      {
-        name: "Area",
-        icon: (
-          <MaterialCommunityIcons
-            name="arrow-expand"
-            size={30}
-            color="#686c71"
-          />
-        ),
-      },
-      {
-        name: "Volume",
-        icon: (
-          <MaterialCommunityIcons
-            name="cube-outline"
-            size={30}
-            color="#686c71"
-          />
-        ),
-      },
-      {
-        name: "Speed",
-        icon: (
-          <MaterialCommunityIcons
-            name="speedometer"
-            size={30}
-            color="#686c71"
-          />
-        ),
-      },
-    ],
+    {
+      name: "BMI",
+      icon: (
+        <MaterialCommunityIcons
+          name="scale-bathroom"
+          size={30}
+          color="#686c71"
+        />
+      ),
+    },
+    {
+      name: "Length",
+      icon: <MaterialCommunityIcons name="ruler" size={30} color="#686c71" />,
+    },
+    {
+      name: "Mass",
+      icon: <MaterialCommunityIcons name="weight" size={30} color="#686c71" />,
+    },
+    {
+      name: "Time",
+      icon: (
+        <MaterialCommunityIcons
+          name="clock-time-three-outline"
+          size={30}
+          color="#686c71"
+        />
+      ),
+    },
+    {
+      name: "Temperature",
+      icon: (
+        <MaterialCommunityIcons name="thermometer" size={30} color="#686c71" />
+      ),
+    },
+    {
+      name: "Area",
+      icon: (
+        <MaterialCommunityIcons name="arrow-expand" size={30} color="#686c71" />
+      ),
+    },
+    {
+      name: "Volume",
+      icon: (
+        <MaterialCommunityIcons name="cube-outline" size={30} color="#686c71" />
+      ),
+    },
+    {
+      name: "Speed",
+      icon: (
+        <MaterialCommunityIcons name="speedometer" size={30} color="#686c71" />
+      ),
+    },
   ];
 
   return (
     <View style={styles.mainContainer}>
       <View style={styles.btnContainer}>
-        {calculatorMenu.map((row, id) => {
+        {calculatorMenu.map((menu, id) => {
           return (
-            <View style={styles.row} key={id}>
-              {row.map((menu, id) => {
-                return (
-                  <View style={styles.btn} key={id}>
-                    <TouchableOpacity
-                      style={styles.btnInner}
-                      onPress={() => navigation.navigate(menu.name)}
-                    >
-                      {menu.icon}
-                      <Text style={styles.btnText}>{menu.name}</Text>
-                    </TouchableOpacity>
-                  </View>
-                );
-              })}
+            <View style={styles.btn} key={id}>
+              <TouchableOpacity
+                style={styles.btnInner}
+                onPress={() => navigation.navigate(menu.name)}
+              >
+                {menu.icon}
+                <Text style={styles.btnText}>{menu.name}</Text>
+              </TouchableOpacity>
             </View>
           );
         })}
@@ -117,23 +83,19 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: "#E2E3Eb",
+    alignItems: "center",
   },
   btnContainer: {
     flex: 1,
-    marginTop: 10,
-    flexDirection: "column",
-    // backgroundColor: "green",
-  },
-  row: {
-    height: "20%",
-    padding: 20,
-    alignItems: "flex-start",
-    justifyContent: "space-around",
+    margin: 20,
     flexDirection: "row",
+    flexWrap: "wrap",
   },
   btn: {
-    flex: 1,
-    margin: 10,
+    width: "27.5%",
+    height: "auto",
+    marginVertical: 16,
+    marginHorizontal: 10,
     shadowColor: "#b9bac1",
     shadowOffset: {
       height: 12,
@@ -144,7 +106,6 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   btnInner: {
-    flex: 1,
     paddingVertical: 10,
     alignItems: "center",
     justifyContent: "space-around",
