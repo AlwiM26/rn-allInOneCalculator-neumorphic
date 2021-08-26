@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const AreaScreen = () => {
+  const [topInput, setTopInput] = useState("0");
+  const [bottomInput, setBottomInput] = useState("0");
+
+  const [topIsClicked, setTopIsClicked] = useState(true);
+
+  const [topUnit, setTopUnit] = useState("Kilograms");
+  const [bottomUnit, setBottomUnit] = useState("Centimeters");
+
   const op = [
     [
       { text: "7", type: "number" },
@@ -37,6 +45,35 @@ const AreaScreen = () => {
     ],
   ];
 
+  const handleTap = (type, val) => {
+    switch (type) {
+      case "number":
+        topIsClicked
+          ? topInput.length < 4 &&
+            setTopInput(topInput === "0" ? val : topInput + val)
+          : bottomInput.length < 4 &&
+            setBottomInput(bottomInput === "0" ? val : bottomInput + val);
+        break;
+      case "clear":
+        topIsClicked ? setTopInput("0") : setBottomInput("0");
+        break;
+      case "backspace":
+        if (topIsClicked) {
+          if (topInput.length <= 1) {
+            setTopInput("0");
+          } else {
+            setTopInput(topInput.substring(0, topInput.length - 1));
+          }
+        } else {
+          if (bottomInput.length <= 1) {
+            setBottomInput("0");
+          } else {
+            setBottomInput(bottomInput.substring(0, bottomInput.length - 1));
+          }
+        }
+    }
+  };
+
   return (
     <View style={styles.mainContainer}>
       {/* Number container */}
@@ -65,12 +102,28 @@ const AreaScreen = () => {
         </View>
         <View style={styles.numContainer}>
           <View style={styles.inputNumContainer}>
-            <Text style={styles.txtNum}>69</Text>
-            <Text style={styles.txtUnit}>Kilograms</Text>
+            <Text
+              style={{
+                fontSize: 30,
+                color: topIsClicked ? "#F85E18" : "black",
+              }}
+              onPress={() => topIsClicked || setTopIsClicked(!topIsClicked)}
+            >
+              {topInput}
+            </Text>
+            <Text style={styles.txtUnit}>{topUnit}</Text>
           </View>
           <View style={styles.inputNumContainer}>
-            <Text style={styles.txtNum}>420</Text>
-            <Text style={styles.txtUnit}>Centimeters</Text>
+            <Text
+              style={{
+                fontSize: 30,
+                color: !topIsClicked ? "#F85E18" : "black",
+              }}
+              onPress={() => topIsClicked && setTopIsClicked(!topIsClicked)}
+            >
+              {bottomInput}
+            </Text>
+            <Text style={styles.txtUnit}>{bottomUnit}</Text>
           </View>
         </View>
       </View>
@@ -92,7 +145,12 @@ const AreaScreen = () => {
                   return (
                     operator.type === "number" && (
                       <View style={styles.outerBtnOperator} key={id}>
-                        <TouchableOpacity style={styles.btnOperator}>
+                        <TouchableOpacity
+                          style={styles.btnOperator}
+                          onPress={() =>
+                            handleTap(operator.type, operator.text)
+                          }
+                        >
                           <Text
                             style={{
                               fontSize: 25,
@@ -119,7 +177,10 @@ const AreaScreen = () => {
               return (
                 operator.type !== "number" && (
                   <View style={styles.outerBtnOperator} key={id}>
-                    <TouchableOpacity style={styles.btnOperator}>
+                    <TouchableOpacity
+                      style={styles.btnOperator}
+                      onPress={() => handleTap(operator.type)}
+                    >
                       <Text
                         style={{
                           fontSize: 25,
@@ -157,14 +218,37 @@ const styles = StyleSheet.create({
   },
   outerBtnType: {
     flex: 1,
-    paddingTop: 20,
-    paddingLeft: 14,
+    marginTop: 20,
+    marginLeft: 20,
+    marginRight: 40,
+    borderRadius: 100,
+    shadowColor: "#b9bac1",
+    shadowOffset: {
+      height: 12,
+      width: 12,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 12,
+    elevation: 10,
   },
   btnType: {
+    paddingVertical: 10,
     flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#E2E3EB",
+    borderRadius: 100,
+    shadowColor: "#FFFFFF",
+    shadowOffset: {
+      height: -12,
+      width: -12,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 12,
+    elevation: 10,
   },
   txtBtnType: {
-    fontSize: 20,
+    fontSize: 18,
   },
   numContainer: {
     flex: 1,
@@ -175,10 +259,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 20,
     alignItems: "flex-end",
-    paddingRight: 14,
-  },
-  txtNum: {
-    fontSize: 26,
+    marginRight: 20,
   },
   txtUnit: {
     color: "#787c84",

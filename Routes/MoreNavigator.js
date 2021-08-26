@@ -3,7 +3,6 @@ import { View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 import BMIScreen from "../Screens/BMIScreen";
-import AgeScreen from "../Screens/AgeScreen";
 import LengthScreen from "../Screens/LengthScreen";
 import MassScreen from "../Screens/MassScreen";
 import TimeScreen from "../Screens/TimeScreen";
@@ -31,14 +30,41 @@ const MoreNavigator = () => {
         options={{ headerShown: false }}
       />
       <moreStack.Screen name="BMI" component={BMIScreen} />
-      <moreStack.Screen name="Age" component={AgeScreen} />
-      <moreStack.Screen name="Length" component={LengthScreen} />
-      <moreStack.Screen name="Mass" component={MassScreen} />
-      <moreStack.Screen name="Time" component={TimeScreen} />
-      <moreStack.Screen name="Temperature" component={TempScreen} />
-      <moreStack.Screen name="Area" component={AreaScreen} />
-      <moreStack.Screen name="Volume" component={VolumeScreen} />
-      <moreStack.Screen name="Speed" component={SpeedScreen} />
+      <moreStack.Screen
+        name="Length"
+        component={LengthScreen}
+        options={{ title: "Length Converter" }}
+      />
+      <moreStack.Screen
+        name="Mass"
+        component={MassScreen}
+        options={{ title: "Mass Converter" }}
+      />
+      <moreStack.Screen
+        name="Time"
+        component={TimeScreen}
+        options={{ title: "Time Converter" }}
+      />
+      <moreStack.Screen
+        name="Temperature"
+        component={TempScreen}
+        options={{ title: "Temperature Converter" }}
+      />
+      <moreStack.Screen
+        name="Area"
+        component={AreaScreen}
+        options={{ title: "Area Converter" }}
+      />
+      <moreStack.Screen
+        name="Volume"
+        component={VolumeScreen}
+        options={{ title: "Volume Converter" }}
+      />
+      <moreStack.Screen
+        name="Speed"
+        component={SpeedScreen}
+        options={{ title: "Speed Converter" }}
+      />
     </moreStack.Navigator>
   );
 };
