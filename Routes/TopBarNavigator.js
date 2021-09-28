@@ -5,7 +5,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import CalculatorScreen from "../Screens/CalculatorScreen";
 import MoreNavigator from "./MoreNavigator";
-import OtherScreen from "../Screens/OtherScreen";
 
 const tab = createMaterialTopTabNavigator();
 

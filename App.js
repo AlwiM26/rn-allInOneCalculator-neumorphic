@@ -1,10 +1,6 @@
 import React from "react";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import TopBarNavigator from "./Routes/TopBarNavigator";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import MoreNavigator from "./Routes/MoreNavigator";
-
-const tab = createMaterialTopTabNavigator();
 
 const App = () => {
   return (

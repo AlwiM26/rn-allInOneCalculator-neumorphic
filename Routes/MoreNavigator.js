@@ -1,7 +1,5 @@
 import React from "react";
-import { View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { NavigationContainer } from "@react-navigation/native";
 import BMIScreen from "../Screens/BMIScreen";
 import LengthScreen from "../Screens/LengthScreen";
 import MassScreen from "../Screens/MassScreen";

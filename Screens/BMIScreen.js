@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import BottomModal from "../components/BottomModal";
 
 const BMIScreen = () => {
   const [topInput, setTopInput] = useState("0");
@@ -10,6 +11,9 @@ const BMIScreen = () => {
 
   const [topUnit, setTopUnit] = useState("Kilograms");
   const [bottomUnit, setBottomUnit] = useState("Centimeters");
+
+  let weightModalRef = React.createRef();
+  let heightModalRef = React.createRef();
 
   const op = [
     [
@@ -80,7 +84,10 @@ const BMIScreen = () => {
       <View style={styles.topContainer}>
         <View style={styles.typeContainer}>
           <View style={styles.outerBtnType}>
-            <TouchableOpacity style={styles.btnType}>
+            <TouchableOpacity
+              style={styles.btnType}
+              onPress={() => weightModalRef.show()}
+            >
               <Text style={styles.txtBtnType}>Weights</Text>
               <MaterialCommunityIcons
                 name="menu-down"
@@ -89,8 +96,17 @@ const BMIScreen = () => {
               />
             </TouchableOpacity>
           </View>
+          <BottomModal
+            ref={(target) => (weightModalRef = target)}
+            title={"Weight"}
+            onTouch={() => weightModalRef.close()}
+            options={[{ name: "Kilograms" }, { name: "Pounds" }]}
+          />
           <View style={styles.outerBtnType}>
-            <TouchableOpacity style={styles.btnType}>
+            <TouchableOpacity
+              style={styles.btnType}
+              onPress={() => heightModalRef.show()}
+            >
               <Text style={styles.txtBtnType}>Height</Text>
               <MaterialCommunityIcons
                 name="menu-down"
@@ -99,6 +115,17 @@ const BMIScreen = () => {
               />
             </TouchableOpacity>
           </View>
+          <BottomModal
+            ref={(target) => (heightModalRef = target)}
+            title={"Height"}
+            onTouch={() => heightModalRef.close()}
+            options={[
+              { name: "Centimeters" },
+              { name: "Meters" },
+              { name: "Feet" },
+              { name: "Inches" },
+            ]}
+          />
         </View>
         <View style={styles.numContainer}>
           <View style={styles.inputNumContainer}>
