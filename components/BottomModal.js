@@ -57,7 +57,11 @@ class BottomModal extends React.Component {
             <View style={styles.optionContainer}>
               {options.map((item, id) => {
                 return (
-                  <TouchableOpacity style={styles.optionBtn} key={id}>
+                  <TouchableOpacity
+                    style={styles.optionBtn}
+                    key={id}
+                    onPress={this.close}
+                  >
                     <Text style={styles.optionTxt}>{item.name}</Text>
                   </TouchableOpacity>
                 );

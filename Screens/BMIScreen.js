@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import BottomModal from "../components/BottomModal";
 
 const BMIScreen = () => {
   const [topInput, setTopInput] = useState("0");
   const [bottomInput, setBottomInput] = useState("0");
+  const [result, setResult] = useState(null);
+  const [bmiStatus, setBmiStatus] = useState("Underweight");
 
   const [topIsClicked, setTopIsClicked] = useState(true);
 
@@ -14,6 +16,8 @@ const BMIScreen = () => {
 
   let weightModalRef = React.createRef();
   let heightModalRef = React.createRef();
+
+  // useEffect(() => {}, [topInput, bottomInput]);
 
   const op = [
     [
@@ -75,6 +79,60 @@ const BMIScreen = () => {
             setBottomInput(bottomInput.substring(0, bottomInput.length - 1));
           }
         }
+        break;
+      case "calculate":
+        if (topInput <= 0 || bottomInput <= 0) {
+          Alert.alert(
+            "Error",
+            "Make sure the weight and height you entered are correct",
+            [{ text: "Ok" }]
+          );
+        } else {
+          let weight = 0;
+          let height = 0;
+
+          if (topUnit === "Pounds") {
+            weight = topInput * 0.453;
+          } else {
+            weight = topInput;
+          }
+
+          if (bottomUnit === "Meters") {
+            height = bottomInput * 100;
+          } else if (bottomUnit === "Feet") {
+            height = bottomInput * 30.48;
+          } else if (bottomUnit === "Inches") {
+            height = bottomInput * 2.54;
+          } else {
+            height = bottomInput;
+          }
+
+          console.log(weight, height);
+
+          let n = eval(
+            weight + " / " + height + " / " + height + " * 10000"
+          ).toFixed(1);
+          if (n > 50) {
+            Alert.alert(
+              "Error",
+              "Make sure the weight and height you entered are correct",
+              [{ text: "Ok" }]
+            );
+          } else {
+            setResult(n);
+            setBmiStatus(
+              n >= 16.0 && n <= 18.5
+                ? "Underweight"
+                : n > 18.5 && n <= 25.0
+                ? "Normal"
+                : "Overweight"
+            );
+          }
+        }
+        break;
+      case "clearResult":
+        setResult(null);
+        break;
     }
   };
 
@@ -163,68 +221,142 @@ const BMIScreen = () => {
         }}
       />
       {/* Operator container */}
-      <View style={styles.operatorContainer}>
-        <View style={styles.column}>
-          {op.map((item, id) => {
-            return (
-              <View style={styles.row} key={id}>
-                {item.map((operator, id) => {
-                  return (
-                    operator.type === "number" && (
-                      <View style={styles.outerBtnOperator} key={id}>
-                        <TouchableOpacity
-                          style={styles.btnOperator}
-                          onPress={() =>
-                            handleTap(operator.type, operator.text)
-                          }
-                        >
-                          <Text
-                            style={{
-                              fontSize: 25,
-                              color:
-                                operator.type === "number"
-                                  ? "black"
-                                  : "#F85E18",
-                            }}
-                          >
-                            {operator.text}
-                          </Text>
-                        </TouchableOpacity>
-                      </View>
-                    )
-                  );
-                })}
-              </View>
-            );
-          })}
-        </View>
-        <View style={styles.modifierContainer}>
-          {op.map((item) => {
-            return item.map((operator, id) => {
+      {result === null ? (
+        <View style={styles.operatorContainer}>
+          <View style={styles.column}>
+            {op.map((item, id) => {
               return (
-                operator.type !== "number" && (
-                  <View style={styles.outerBtnOperator} key={id}>
-                    <TouchableOpacity
-                      style={styles.btnOperator}
-                      onPress={() => handleTap(operator.type)}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 25,
-                          color:
-                            operator.type === "number" ? "black" : "#F85E18",
-                        }}
-                      >
-                        {operator.text}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                )
+                <View style={styles.row} key={id}>
+                  {item.map((operator, id) => {
+                    return (
+                      operator.type === "number" && (
+                        <View style={styles.outerBtnOperator} key={id}>
+                          <TouchableOpacity
+                            style={styles.btnOperator}
+                            onPress={() =>
+                              handleTap(operator.type, operator.text)
+                            }
+                          >
+                            <Text
+                              style={{
+                                fontSize: 25,
+                                color:
+                                  operator.type === "number"
+                                    ? "black"
+                                    : "#F85E18",
+                              }}
+                            >
+                              {operator.text}
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      )
+                    );
+                  })}
+                </View>
               );
-            });
-          })}
+            })}
+          </View>
+          <View style={styles.modifierContainer}>
+            {op.map((item) => {
+              return item.map((operator, id) => {
+                return (
+                  operator.type !== "number" && (
+                    <View style={styles.outerBtnOperator} key={id}>
+                      <TouchableOpacity
+                        style={styles.btnOperator}
+                        onPress={() => handleTap(operator.type)}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 25,
+                            color:
+                              operator.type === "number" ? "black" : "#F85E18",
+                          }}
+                        >
+                          {operator.text}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  )
+                );
+              });
+            })}
+          </View>
         </View>
-      </View>
+      ) : (
+        <View style={styles.containerResult}>
+          <View style={styles.cardContainerOuter}>
+            <View style={styles.cardContainer}>
+              <View style={styles.cardTopSec}>
+                <Text style={styles.txtResult}>{result}</Text>
+                <View style={styles.statusContainer}>
+                  <Text style={styles.txtBMI}>BMI</Text>
+                  <Text style={styles.txtStatus}>{bmiStatus}</Text>
+                </View>
+              </View>
+              <View style={styles.cardBotSec}>
+                <View style={styles.containerTxtCat}>
+                  <Text style={[styles.txtCat, { color: "#499de9" }]}>
+                    Underweight
+                  </Text>
+                  <Text style={[styles.txtCat, { color: "#63cf75" }]}>
+                    Normal
+                  </Text>
+                  <Text style={[styles.txtCat, { color: "#f37a7a" }]}>
+                    Overweight
+                  </Text>
+                </View>
+                <View style={styles.containerCatBar}>
+                  <View
+                    style={{
+                      borderBottomColor: "#499de9",
+                      borderBottomWidth: 5,
+                      flex: 1,
+                    }}
+                  />
+                  <View
+                    style={{
+                      borderBottomColor: "#63cf75",
+                      borderBottomWidth: 5,
+                      flex: 1,
+                    }}
+                  />
+                  <View
+                    style={{
+                      borderBottomColor: "#f37a7a",
+                      borderBottomWidth: 5,
+                      flex: 1,
+                    }}
+                  />
+                </View>
+                <View style={styles.containerTxtCatNum}>
+                  <Text style={styles.txtCatNum}>16.0</Text>
+                  <Text style={styles.txtCatNum}>18.5</Text>
+                  <Text style={[styles.txtCatNum, { textAlign: "right" }]}>
+                    25.0
+                  </Text>
+                  <Text style={[styles.txtCatNum, { textAlign: "right" }]}>
+                    40.0
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+          <View style={styles.containerBtnBack}>
+            <TouchableOpacity
+              style={styles.btnBack}
+              onPress={() => handleTap("clearResult", 0)}
+            >
+              <MaterialCommunityIcons
+                name="chevron-left"
+                size={35}
+                color="#F85E18"
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
     </View>
   );
 };
@@ -336,6 +468,121 @@ const styles = StyleSheet.create({
   modifierContainer: {
     flex: 1,
     padding: 10,
+  },
+  containerResult: {
+    flex: 1,
+    marginBottom: 24,
+  },
+  cardContainerOuter: {
+    flex: 1,
+    marginHorizontal: 25,
+    marginVertical: 10,
+    borderRadius: 30,
+    shadowColor: "#b9bac1",
+    shadowOffset: {
+      height: 12,
+      width: 12,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 12,
+    elevation: 10,
+  },
+  cardContainer: {
+    flex: 1,
+    alignItems: "center",
+    backgroundColor: "#E2E3EB",
+    borderRadius: 30,
+    shadowColor: "#FFFFFF",
+    shadowOffset: {
+      height: -12,
+      width: -12,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 12,
+    elevation: 10,
+    alignItems: "center",
+    padding: 10,
+  },
+  cardTopSec: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  txtResult: {
+    textAlign: "center",
+    fontSize: 55,
+    fontWeight: "700",
+    color: "#F85E18",
+    marginRight: 10,
+  },
+  statusContainer: {
+    alignItems: "center",
+  },
+  txtBMI: {
+    color: "#787c84",
+    fontSize: 40,
+    fontWeight: "600",
+  },
+  txtStatus: {
+    fontSize: 12,
+    color: "#F85E18",
+  },
+  cardBotSec: {
+    flex: 1,
+    alignItems: "center",
+    paddingHorizontal: 10,
+  },
+  containerTxtCat: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+  },
+  txtCat: {
+    flex: 1,
+    textAlign: "center",
+  },
+  containerCatBar: {
+    marginVertical: 8,
+    flexDirection: "row",
+  },
+  containerTxtCatNum: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  txtCatNum: {
+    flex: 1,
+    marginHorizontal: 2,
+  },
+  containerBtnBack: {
+    alignSelf: "center",
+    alignContent: "center",
+    width: 80,
+    height: 80,
+    padding: 10,
+    borderRadius: 20,
+    shadowColor: "#b9bac1",
+    shadowOffset: {
+      height: 12,
+      width: 12,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 12,
+    elevation: 10,
+  },
+  btnBack: {
+    flex: 1,
+    alignItems: "center",
+    backgroundColor: "#E2E3EB",
+    justifyContent: "space-around",
+    borderRadius: 20,
+    shadowColor: "#FFFFFF",
+    shadowOffset: {
+      height: -12,
+      width: -12,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 12,
+    elevation: 10,
   },
 });
 
