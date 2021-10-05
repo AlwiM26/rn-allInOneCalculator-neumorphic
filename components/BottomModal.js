@@ -41,7 +41,7 @@ class BottomModal extends React.Component {
   };
 
   render() {
-    let { title, onTouch, options } = this.props;
+    let { title, onTouch, options, setUnit } = this.props;
 
     return (
       <Modal
@@ -60,7 +60,7 @@ class BottomModal extends React.Component {
                   <TouchableOpacity
                     style={styles.optionBtn}
                     key={id}
-                    onPress={this.close}
+                    onPress={() => setUnit(item.name)}
                   >
                     <Text style={styles.optionTxt}>{item.name}</Text>
                   </TouchableOpacity>

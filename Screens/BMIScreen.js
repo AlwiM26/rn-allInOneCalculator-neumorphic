@@ -8,6 +8,8 @@ const BMIScreen = () => {
   const [bottomInput, setBottomInput] = useState("0");
   const [result, setResult] = useState(null);
   const [bmiStatus, setBmiStatus] = useState("Underweight");
+  const [weightHavePoint, setWeightHavePoint] = useState(false);
+  const [heightHavePoint, setHeightHavePoint] = useState(false);
 
   const [topIsClicked, setTopIsClicked] = useState(true);
 
@@ -49,21 +51,48 @@ const BMIScreen = () => {
     ],
     [
       { text: "0", type: "number" },
-      { text: ".", type: "number" },
+      { text: ".", type: "point" },
     ],
   ];
 
   const handleTap = (type, val) => {
     switch (type) {
+      case "point":
+        if (topIsClicked) {
+          if (!weightHavePoint) {
+            setTopInput(topInput + val);
+            setWeightHavePoint(true);
+          }
+        } else {
+          if (!heightHavePoint) {
+            setBottomInput(bottomInput + val);
+            setHeightHavePoint(true);
+          }
+        }
+        break;
       case "number":
-        topIsClicked
-          ? topInput.length < 4 &&
-            setTopInput(topInput === "0" ? val : topInput + val)
-          : bottomInput.length < 4 &&
-            setBottomInput(bottomInput === "0" ? val : bottomInput + val);
+        if (topIsClicked) {
+          !weightHavePoint
+            ? topInput.length < 3 &&
+              setTopInput(topInput === "0" ? val : topInput + val)
+            : topInput.length < 5 &&
+              setTopInput(topInput === "0" ? val : topInput + val);
+        } else {
+          !heightHavePoint
+            ? bottomInput.length < 3 &&
+              setBottomInput(bottomInput === "0" ? val : bottomInput + val)
+            : bottomInput.length < 4 &&
+              setBottomInput(bottomInput === "0" ? val : bottomInput + val);
+        }
         break;
       case "clear":
-        topIsClicked ? setTopInput("0") : setBottomInput("0");
+        if (topIsClicked) {
+          setTopInput("0");
+          setWeightHavePoint(false);
+        } else {
+          setBottomUnit("0");
+          setHeightHavePoint(false);
+        }
         break;
       case "backspace":
         if (topIsClicked) {
@@ -91,12 +120,14 @@ const BMIScreen = () => {
           let weight = 0;
           let height = 0;
 
+          // weight conversions
           if (topUnit === "Pounds") {
             weight = topInput * 0.453;
           } else {
             weight = topInput;
           }
 
+          // height conversions
           if (bottomUnit === "Meters") {
             height = bottomInput * 100;
           } else if (bottomUnit === "Feet") {
@@ -106,8 +137,6 @@ const BMIScreen = () => {
           } else {
             height = bottomInput;
           }
-
-          console.log(weight, height);
 
           let n = eval(
             weight + " / " + height + " / " + height + " * 10000"
@@ -121,9 +150,9 @@ const BMIScreen = () => {
           } else {
             setResult(n);
             setBmiStatus(
-              n >= 16.0 && n <= 18.5
+              n < 18.5
                 ? "Underweight"
-                : n > 18.5 && n <= 25.0
+                : n >= 18.5 && n < 25.0
                 ? "Normal"
                 : "Overweight"
             );
@@ -159,6 +188,10 @@ const BMIScreen = () => {
             title={"Weight"}
             onTouch={() => weightModalRef.close()}
             options={[{ name: "Kilograms" }, { name: "Pounds" }]}
+            setUnit={(val) => {
+              weightModalRef.close();
+              setTopUnit(val);
+            }}
           />
           <View style={styles.outerBtnType}>
             <TouchableOpacity
@@ -183,6 +216,10 @@ const BMIScreen = () => {
               { name: "Feet" },
               { name: "Inches" },
             ]}
+            setUnit={(val) => {
+              heightModalRef.close();
+              setBottomUnit(val);
+            }}
           />
         </View>
         <View style={styles.numContainer}>
@@ -228,30 +265,29 @@ const BMIScreen = () => {
               return (
                 <View style={styles.row} key={id}>
                   {item.map((operator, id) => {
-                    return (
-                      operator.type === "number" && (
-                        <View style={styles.outerBtnOperator} key={id}>
-                          <TouchableOpacity
-                            style={styles.btnOperator}
-                            onPress={() =>
-                              handleTap(operator.type, operator.text)
-                            }
+                    return operator.type === "number" ||
+                      operator.type === "point" ? (
+                      <View style={styles.outerBtnOperator} key={id}>
+                        <TouchableOpacity
+                          style={styles.btnOperator}
+                          onPress={() =>
+                            handleTap(operator.type, operator.text)
+                          }
+                        >
+                          <Text
+                            style={{
+                              fontSize: 25,
+                              color:
+                                operator.type === "number"
+                                  ? "black"
+                                  : "#F85E18",
+                            }}
                           >
-                            <Text
-                              style={{
-                                fontSize: 25,
-                                color:
-                                  operator.type === "number"
-                                    ? "black"
-                                    : "#F85E18",
-                              }}
-                            >
-                              {operator.text}
-                            </Text>
-                          </TouchableOpacity>
-                        </View>
-                      )
-                    );
+                            {operator.text}
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    ) : null;
                   })}
                 </View>
               );
@@ -260,26 +296,25 @@ const BMIScreen = () => {
           <View style={styles.modifierContainer}>
             {op.map((item) => {
               return item.map((operator, id) => {
-                return (
-                  operator.type !== "number" && (
-                    <View style={styles.outerBtnOperator} key={id}>
-                      <TouchableOpacity
-                        style={styles.btnOperator}
-                        onPress={() => handleTap(operator.type)}
+                return operator.type !== "number" &&
+                  operator.type !== "point" ? (
+                  <View style={styles.outerBtnOperator} key={id}>
+                    <TouchableOpacity
+                      style={styles.btnOperator}
+                      onPress={() => handleTap(operator.type)}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 25,
+                          color:
+                            operator.type === "number" ? "black" : "#F85E18",
+                        }}
                       >
-                        <Text
-                          style={{
-                            fontSize: 25,
-                            color:
-                              operator.type === "number" ? "black" : "#F85E18",
-                          }}
-                        >
-                          {operator.text}
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  )
-                );
+                        {operator.text}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : null;
               });
             })}
           </View>
@@ -524,7 +559,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   txtStatus: {
-    fontSize: 12,
+    fontSize: 13,
     color: "#F85E18",
   },
   cardBotSec: {
