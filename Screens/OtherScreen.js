@@ -17,10 +17,29 @@ const OtherScreen = ({ navigation }) => {
     {
       name: "Length",
       icon: <MaterialCommunityIcons name="ruler" size={30} color="#686c71" />,
+      options: [
+        { name: "Kilometer", code: "km" },
+        { name: "Meter", code: "m" },
+        { name: "Decimeter", code: "dm" },
+        { name: "Centimeter", code: "cm" },
+        { name: "Milimeter", code: "mm" },
+        { name: "Mile", code: "mi" },
+        { name: "Foot", code: "ft" },
+        { name: "Inch", code: "in" },
+      ],
     },
     {
       name: "Mass",
       icon: <MaterialCommunityIcons name="weight" size={30} color="#686c71" />,
+      options: [
+        { name: "Tonne", code: "t" },
+        { name: "Kilogram", code: "kg" },
+        { name: "Gram", code: "g" },
+        { name: "Miligram", code: "mg" },
+        { name: "Quintal", code: "q" },
+        { name: "Pound", code: "lb" },
+        { name: "Ounce", code: "oz" },
+      ],
     },
     {
       name: "Time",
@@ -31,30 +50,47 @@ const OtherScreen = ({ navigation }) => {
           color="#686c71"
         />
       ),
+      options: [
+        { name: "Hour", code: "h" },
+        { name: "Minute", code: "min" },
+        { name: "Second", code: "s" },
+      ],
     },
     {
       name: "Temperature",
       icon: (
         <MaterialCommunityIcons name="thermometer" size={30} color="#686c71" />
       ),
-    },
-    {
-      name: "Area",
-      icon: (
-        <MaterialCommunityIcons name="arrow-expand" size={30} color="#686c71" />
-      ),
+      options: [
+        { name: "Celsius", code: "°C" },
+        { name: "Fahrenheit", code: "°F" },
+        { name: "Kelvin", code: "K" },
+      ],
     },
     {
       name: "Volume",
       icon: (
         <MaterialCommunityIcons name="cube-outline" size={30} color="#686c71" />
       ),
+      options: [
+        { name: "Cubic meter", code: "m³" },
+        { name: "Cubic decimeter", code: "dm³" },
+        { name: "Cubic centimeter", code: "cm³" },
+        { name: "Liter", code: "l" },
+        { name: "Mililiter", code: "ml" },
+      ],
     },
     {
       name: "Speed",
       icon: (
         <MaterialCommunityIcons name="speedometer" size={30} color="#686c71" />
       ),
+      options: [
+        { name: "Meter per second", code: "m/s" },
+        { name: "Kilometer per hour", code: "km/h" },
+        { name: "Kilometer per second", code: "km/s" },
+        { name: "Mile per hour", code: "mph" },
+      ],
     },
   ];
 
@@ -66,7 +102,12 @@ const OtherScreen = ({ navigation }) => {
             <View style={styles.btn} key={id}>
               <TouchableOpacity
                 style={styles.btnInner}
-                onPress={() => navigation.navigate(menu.name)}
+                onPress={() =>
+                  navigation.navigate(
+                    menu.name,
+                    menu.name !== "BMI" && { opt: menu.options }
+                  )
+                }
               >
                 {menu.icon}
                 <Text style={styles.btnText}>{menu.name}</Text>

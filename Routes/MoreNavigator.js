@@ -1,13 +1,7 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BMIScreen from "../Screens/BMIScreen";
-import LengthScreen from "../Screens/LengthScreen";
-import MassScreen from "../Screens/MassScreen";
-import TimeScreen from "../Screens/TimeScreen";
-import TempScreen from "../Screens/TempScreen";
-import AreaScreen from "../Screens/AreaScreen";
-import VolumeScreen from "../Screens/VolumeScreen";
-import SpeedScreen from "../Screens/SpeedScreen";
+import ConversionScreen from "../Screens/ConversionScreen";
 import OtherScreen from "../Screens/OtherScreen";
 
 const moreStack = createNativeStackNavigator();
@@ -30,37 +24,32 @@ const MoreNavigator = () => {
       <moreStack.Screen name="BMI" component={BMIScreen} />
       <moreStack.Screen
         name="Length"
-        component={LengthScreen}
+        component={ConversionScreen}
         options={{ title: "Length Converter" }}
       />
       <moreStack.Screen
         name="Mass"
-        component={MassScreen}
+        component={ConversionScreen}
         options={{ title: "Mass Converter" }}
       />
       <moreStack.Screen
         name="Time"
-        component={TimeScreen}
+        component={ConversionScreen}
         options={{ title: "Time Converter" }}
       />
       <moreStack.Screen
         name="Temperature"
-        component={TempScreen}
+        component={ConversionScreen}
         options={{ title: "Temperature Converter" }}
       />
       <moreStack.Screen
-        name="Area"
-        component={AreaScreen}
-        options={{ title: "Area Converter" }}
-      />
-      <moreStack.Screen
         name="Volume"
-        component={VolumeScreen}
+        component={ConversionScreen}
         options={{ title: "Volume Converter" }}
       />
       <moreStack.Screen
         name="Speed"
-        component={SpeedScreen}
+        component={ConversionScreen}
         options={{ title: "Speed Converter" }}
       />
     </moreStack.Navigator>

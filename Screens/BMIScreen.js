@@ -13,9 +13,19 @@ const BMIScreen = () => {
 
   const [topIsClicked, setTopIsClicked] = useState(true);
 
-  const [topUnit, setTopUnit] = useState("Kilograms");
-  const [bottomUnit, setBottomUnit] = useState("Centimeters");
+  const weightOptions = [
+    { name: "Kilograms", code: "kg" },
+    { name: "Pounds", code: "lb" },
+  ];
+  const heightOptions = [
+    { name: "Centimeters", code: "cm" },
+    { name: "Meters", code: "m" },
+    { name: "Feet", code: "ft" },
+    { name: "Inches", code: "in" },
+  ];
 
+  const [topUnit, setTopUnit] = useState(weightOptions[0]);
+  const [bottomUnit, setBottomUnit] = useState(heightOptions[0]);
   let weightModalRef = React.createRef();
   let heightModalRef = React.createRef();
 
@@ -58,110 +68,133 @@ const BMIScreen = () => {
   const handleTap = (type, val) => {
     switch (type) {
       case "point":
-        if (topIsClicked) {
-          if (!weightHavePoint) {
-            setTopInput(topInput + val);
-            setWeightHavePoint(true);
-          }
-        } else {
-          if (!heightHavePoint) {
-            setBottomInput(bottomInput + val);
-            setHeightHavePoint(true);
-          }
-        }
+        handlePoint(val);
         break;
       case "number":
-        if (topIsClicked) {
-          !weightHavePoint
-            ? topInput.length < 3 &&
-              setTopInput(topInput === "0" ? val : topInput + val)
-            : topInput.length < 5 &&
-              setTopInput(topInput === "0" ? val : topInput + val);
-        } else {
-          !heightHavePoint
-            ? bottomInput.length < 3 &&
-              setBottomInput(bottomInput === "0" ? val : bottomInput + val)
-            : bottomInput.length < 4 &&
-              setBottomInput(bottomInput === "0" ? val : bottomInput + val);
-        }
+        handleNumber(val);
         break;
       case "clear":
-        if (topIsClicked) {
-          setTopInput("0");
-          setWeightHavePoint(false);
-        } else {
-          setBottomUnit("0");
-          setHeightHavePoint(false);
-        }
+        handleClear();
         break;
       case "backspace":
-        if (topIsClicked) {
-          if (topInput.length <= 1) {
-            setTopInput("0");
-          } else {
-            setTopInput(topInput.substring(0, topInput.length - 1));
-          }
-        } else {
-          if (bottomInput.length <= 1) {
-            setBottomInput("0");
-          } else {
-            setBottomInput(bottomInput.substring(0, bottomInput.length - 1));
-          }
-        }
+        handleBackspace();
         break;
       case "calculate":
-        if (topInput <= 0 || bottomInput <= 0) {
-          Alert.alert(
-            "Error",
-            "Make sure the weight and height you entered are correct",
-            [{ text: "Ok" }]
-          );
-        } else {
-          let weight = 0;
-          let height = 0;
-
-          // weight conversions
-          if (topUnit === "Pounds") {
-            weight = topInput * 0.453;
-          } else {
-            weight = topInput;
-          }
-
-          // height conversions
-          if (bottomUnit === "Meters") {
-            height = bottomInput * 100;
-          } else if (bottomUnit === "Feet") {
-            height = bottomInput * 30.48;
-          } else if (bottomUnit === "Inches") {
-            height = bottomInput * 2.54;
-          } else {
-            height = bottomInput;
-          }
-
-          let n = eval(
-            weight + " / " + height + " / " + height + " * 10000"
-          ).toFixed(1);
-          if (n > 50) {
-            Alert.alert(
-              "Error",
-              "Make sure the weight and height you entered are correct",
-              [{ text: "Ok" }]
-            );
-          } else {
-            setResult(n);
-            setBmiStatus(
-              n < 18.5
-                ? "Underweight"
-                : n >= 18.5 && n < 25.0
-                ? "Normal"
-                : "Overweight"
-            );
-          }
-        }
+        handleCalculate();
         break;
       case "clearResult":
         setResult(null);
         break;
+    }
+  };
+
+  const handlePoint = (val) => {
+    if (topIsClicked) {
+      if (!weightHavePoint) {
+        setTopInput(topInput + val);
+        setWeightHavePoint(true);
+      }
+    } else {
+      if (!heightHavePoint) {
+        setBottomInput(bottomInput + val);
+        setHeightHavePoint(true);
+      }
+    }
+  };
+
+  const handleNumber = (val) => {
+    if (topIsClicked) {
+      !weightHavePoint
+        ? topInput.length < 3 &&
+          setTopInput(topInput === "0" ? val : topInput + val)
+        : topInput.length < 5 &&
+          setTopInput(topInput === "0" ? val : topInput + val);
+    } else {
+      !heightHavePoint
+        ? bottomInput.length < 3 &&
+          setBottomInput(bottomInput === "0" ? val : bottomInput + val)
+        : bottomInput.length < 5 &&
+          setBottomInput(bottomInput === "0" ? val : bottomInput + val);
+    }
+  };
+
+  const handleClear = () => {
+    if (topIsClicked) {
+      setTopInput("0");
+      setWeightHavePoint(false);
+    } else {
+      setBottomInput("0");
+      setHeightHavePoint(false);
+    }
+  };
+
+  const handleBackspace = () => {
+    if (topIsClicked) {
+      if (topInput.length <= 1) {
+        setTopInput("0");
+      } else {
+        topInput[topInput.length - 1] === "." && setWeightHavePoint(false);
+        setTopInput(topInput.substring(0, topInput.length - 1));
+      }
+    } else {
+      if (bottomInput.length <= 1) {
+        setBottomInput("0");
+      } else {
+        bottomInput[bottomInput.length - 1] === "." &&
+          setHeightHavePoint(false);
+        setBottomInput(bottomInput.substring(0, bottomInput.length - 1));
+      }
+    }
+  };
+
+  const handleCalculate = () => {
+    if (topInput <= 0 || bottomInput <= 0) {
+      Alert.alert(
+        "Error",
+        "Make sure the weight and height you entered are correct",
+        [{ text: "Ok" }]
+      );
+    } else {
+      let weight = 0;
+      let height = 0;
+
+      // weight conversions
+      if (topUnit.name === "Pounds") {
+        weight = topInput * 0.453;
+      } else {
+        weight = topInput;
+      }
+
+      // height conversions
+      if (bottomUnit.name === "Meters") {
+        height = bottomInput * 100;
+      } else if (bottomUnit.name === "Feet") {
+        height = bottomInput * 30.48;
+      } else if (bottomUnit.name === "Inches") {
+        height = bottomInput * 2.54;
+      } else {
+        height = bottomInput;
+      }
+
+      let n = eval(
+        weight + " / " + height + " / " + height + " * 10000"
+      ).toFixed(1);
+      if (n > 50) {
+        Alert.alert(
+          "Error",
+          "Make sure the weight and height you entered are correct",
+          [{ text: "Ok" }]
+        );
+      } else {
+        setResult(n);
+        setBmiStatus(
+          n < 18.5
+            ? "Underweight"
+            : n >= 18.5 && n < 25.0
+            ? "Normal"
+            : "Overweight"
+        );
+      }
     }
   };
 
@@ -187,7 +220,7 @@ const BMIScreen = () => {
             ref={(target) => (weightModalRef = target)}
             title={"Weight"}
             onTouch={() => weightModalRef.close()}
-            options={[{ name: "Kilograms" }, { name: "Pounds" }]}
+            options={weightOptions}
             setUnit={(val) => {
               weightModalRef.close();
               setTopUnit(val);
@@ -210,12 +243,7 @@ const BMIScreen = () => {
             ref={(target) => (heightModalRef = target)}
             title={"Height"}
             onTouch={() => heightModalRef.close()}
-            options={[
-              { name: "Centimeters" },
-              { name: "Meters" },
-              { name: "Feet" },
-              { name: "Inches" },
-            ]}
+            options={heightOptions}
             setUnit={(val) => {
               heightModalRef.close();
               setBottomUnit(val);
@@ -233,7 +261,7 @@ const BMIScreen = () => {
             >
               {topInput}
             </Text>
-            <Text style={styles.txtUnit}>{topUnit}</Text>
+            <Text style={styles.txtUnit}>{topUnit.name}</Text>
           </View>
           <View style={styles.inputNumContainer}>
             <Text
@@ -245,7 +273,7 @@ const BMIScreen = () => {
             >
               {bottomInput}
             </Text>
-            <Text style={styles.txtUnit}>{bottomUnit}</Text>
+            <Text style={styles.txtUnit}>{bottomUnit.name}</Text>
           </View>
         </View>
       </View>

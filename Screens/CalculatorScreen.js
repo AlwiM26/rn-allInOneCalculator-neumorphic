@@ -224,6 +224,7 @@ const styles = StyleSheet.create({
   resultText: {
     fontSize: 40,
     padding: 15,
+    textAlign: "right",
   },
   operatorContainer: {
     flex: 1,

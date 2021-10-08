@@ -60,7 +60,7 @@ class BottomModal extends React.Component {
                   <TouchableOpacity
                     style={styles.optionBtn}
                     key={id}
-                    onPress={() => setUnit(item.name)}
+                    onPress={() => setUnit(item)}
                   >
                     <Text style={styles.optionTxt}>{item.name}</Text>
                   </TouchableOpacity>
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
     padding: 15,
-    maxHeight: deviceHeight * 0.4,
+    maxHeight: deviceHeight,
     width: "100%",
   },
   containerTitle: {

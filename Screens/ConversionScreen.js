@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import BottomModal from "../components/BottomModal";
 
-const MassScreen = () => {
-  const [topInput, setTopInput] = useState("0");
-  const [bottomInput, setBottomInput] = useState("0");
+const ConversionScreen = ({ route, navigation }) => {
+  const { opt } = route.params;
+
+  const [topInput, setTopInput] = useState("1");
+  const [bottomInput, setBottomInput] = useState("1");
 
   const [topIsClicked, setTopIsClicked] = useState(true);
 
-  const [topUnit, setTopUnit] = useState("Kilograms");
-  const [bottomUnit, setBottomUnit] = useState("Centimeters");
+  const [topUnit, setTopUnit] = useState(opt[0]);
+  const [bottomUnit, setBottomUnit] = useState(opt[0]);
 
   const op = [
     [
@@ -37,13 +40,15 @@ const MassScreen = () => {
       { text: "1", type: "number" },
       { text: "2", type: "number" },
       { text: "3", type: "number" },
-      { text: "GO", type: "calculate" },
     ],
     [
       { text: "0", type: "number" },
       { text: ".", type: "number" },
     ],
   ];
+
+  let topRef = React.createRef();
+  let botRef = React.createRef();
 
   const handleTap = (type, val) => {
     switch (type) {
@@ -80,8 +85,11 @@ const MassScreen = () => {
       <View style={styles.topContainer}>
         <View style={styles.typeContainer}>
           <View style={styles.outerBtnType}>
-            <TouchableOpacity style={styles.btnType}>
-              <Text style={styles.txtBtnType}>Weights</Text>
+            <TouchableOpacity
+              style={styles.btnType}
+              onPress={() => topRef.show()}
+            >
+              <Text style={styles.txtBtnType}>{topUnit.code}</Text>
               <MaterialCommunityIcons
                 name="menu-down"
                 size={24}
@@ -89,9 +97,22 @@ const MassScreen = () => {
               />
             </TouchableOpacity>
           </View>
+          <BottomModal
+            ref={(target) => (topRef = target)}
+            title={"Select Unit"}
+            onTouch={() => topRef.close()}
+            options={opt}
+            setUnit={(val) => {
+              topRef.close();
+              setTopUnit(val);
+            }}
+          />
           <View style={styles.outerBtnType}>
-            <TouchableOpacity style={styles.btnType}>
-              <Text style={styles.txtBtnType}>Height</Text>
+            <TouchableOpacity
+              style={styles.btnType}
+              onPress={() => botRef.show()}
+            >
+              <Text style={styles.txtBtnType}>{bottomUnit.code}</Text>
               <MaterialCommunityIcons
                 name="menu-down"
                 size={24}
@@ -99,6 +120,16 @@ const MassScreen = () => {
               />
             </TouchableOpacity>
           </View>
+          <BottomModal
+            ref={(target) => (botRef = target)}
+            title={"Select Unit"}
+            onTouch={() => botRef.close()}
+            options={opt}
+            setUnit={(val) => {
+              botRef.close();
+              setBottomUnit(val);
+            }}
+          />
         </View>
         <View style={styles.numContainer}>
           <View style={styles.inputNumContainer}>
@@ -111,7 +142,7 @@ const MassScreen = () => {
             >
               {topInput}
             </Text>
-            <Text style={styles.txtUnit}>{topUnit}</Text>
+            <Text style={styles.txtUnit}>{topUnit.name}</Text>
           </View>
           <View style={styles.inputNumContainer}>
             <Text
@@ -123,7 +154,7 @@ const MassScreen = () => {
             >
               {bottomInput}
             </Text>
-            <Text style={styles.txtUnit}>{bottomUnit}</Text>
+            <Text style={styles.txtUnit}>{bottomUnit.name}</Text>
           </View>
         </View>
       </View>
@@ -312,4 +343,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MassScreen;
+export default ConversionScreen;
