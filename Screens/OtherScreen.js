@@ -20,7 +20,6 @@ const OtherScreen = ({ navigation }) => {
       options: [
         { name: "Kilometer", code: "km" },
         { name: "Meter", code: "m" },
-        { name: "Decimeter", code: "dm" },
         { name: "Centimeter", code: "cm" },
         { name: "Milimeter", code: "mm" },
         { name: "Mile", code: "mi" },
@@ -36,7 +35,6 @@ const OtherScreen = ({ navigation }) => {
         { name: "Kilogram", code: "kg" },
         { name: "Gram", code: "g" },
         { name: "Miligram", code: "mg" },
-        { name: "Quintal", code: "q" },
         { name: "Pound", code: "lb" },
         { name: "Ounce", code: "oz" },
       ],
@@ -51,6 +49,10 @@ const OtherScreen = ({ navigation }) => {
         />
       ),
       options: [
+        { name: "Day", code: "d" },
+        { name: "Week", code: "week" },
+        { name: "Month", code: "month" },
+        { name: "Year", code: "year" },
         { name: "Hour", code: "h" },
         { name: "Minute", code: "min" },
         { name: "Second", code: "s" },
@@ -62,8 +64,8 @@ const OtherScreen = ({ navigation }) => {
         <MaterialCommunityIcons name="thermometer" size={30} color="#686c71" />
       ),
       options: [
-        { name: "Celsius", code: "°C" },
-        { name: "Fahrenheit", code: "°F" },
+        { name: "Celsius", code: "C" },
+        { name: "Fahrenheit", code: "F" },
         { name: "Kelvin", code: "K" },
       ],
     },
@@ -73,9 +75,9 @@ const OtherScreen = ({ navigation }) => {
         <MaterialCommunityIcons name="cube-outline" size={30} color="#686c71" />
       ),
       options: [
-        { name: "Cubic meter", code: "m³" },
-        { name: "Cubic decimeter", code: "dm³" },
-        { name: "Cubic centimeter", code: "cm³" },
+        { name: "Cubic kilometer", code: "km3" },
+        { name: "Cubic meter", code: "m3" },
+        { name: "Cubic centimeter", code: "cm3" },
         { name: "Liter", code: "l" },
         { name: "Mililiter", code: "ml" },
       ],
@@ -88,8 +90,7 @@ const OtherScreen = ({ navigation }) => {
       options: [
         { name: "Meter per second", code: "m/s" },
         { name: "Kilometer per hour", code: "km/h" },
-        { name: "Kilometer per second", code: "km/s" },
-        { name: "Mile per hour", code: "mph" },
+        { name: "Mile per hour", code: "m/h" },
       ],
     },
   ];

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import convert from "convert-units";
 import BottomModal from "../components/BottomModal";
 
 const ConversionScreen = ({ route, navigation }) => {
@@ -10,9 +11,11 @@ const ConversionScreen = ({ route, navigation }) => {
   const [bottomInput, setBottomInput] = useState("1");
 
   const [topIsClicked, setTopIsClicked] = useState(true);
+  const [topHavePoint, setTopHavePoint] = useState(false);
+  const [botHavePoint, setBotHavePoint] = useState(false);
 
   const [topUnit, setTopUnit] = useState(opt[0]);
-  const [bottomUnit, setBottomUnit] = useState(opt[0]);
+  const [bottomUnit, setBottomUnit] = useState(opt[1]);
 
   const op = [
     [
@@ -43,39 +46,79 @@ const ConversionScreen = ({ route, navigation }) => {
     ],
     [
       { text: "0", type: "number" },
-      { text: ".", type: "number" },
+      { text: ".", type: "point" },
     ],
   ];
+
+  useEffect(() => {
+    topIsClicked
+      ? setBottomInput(
+          convert(+topInput)
+            .from(topUnit.code)
+            .to(bottomUnit.code)
+        )
+      : setTopInput(
+          convert(+bottomInput)
+            .from(bottomUnit.code)
+            .to(topUnit.code)
+        );
+  }, [topInput, topUnit, bottomInput, bottomUnit]);
 
   let topRef = React.createRef();
   let botRef = React.createRef();
 
   const handleTap = (type, val) => {
     switch (type) {
+      case "point":
+        handlePoint(val);
+        break;
       case "number":
         topIsClicked
-          ? topInput.length < 4 &&
+          ? topInput.length < 15 &&
             setTopInput(topInput === "0" ? val : topInput + val)
-          : bottomInput.length < 4 &&
+          : bottomInput.length < 10 &&
             setBottomInput(bottomInput === "0" ? val : bottomInput + val);
         break;
       case "clear":
-        topIsClicked ? setTopInput("0") : setBottomInput("0");
+        if (topIsClicked) {
+          setTopInput("0");
+          setTopHavePoint(false);
+        } else {
+          setBottomInput("0");
+          setBotHavePoint(false);
+        }
         break;
       case "backspace":
         if (topIsClicked) {
           if (topInput.length <= 1) {
             setTopInput("0");
           } else {
+            topInput[topInput.length - 1] === "." && setTopHavePoint(false);
             setTopInput(topInput.substring(0, topInput.length - 1));
           }
         } else {
           if (bottomInput.length <= 1) {
             setBottomInput("0");
           } else {
+            bottomInput[bottomInput.length - 1] === "." &&
+              setBotHavePoint(false);
             setBottomInput(bottomInput.substring(0, bottomInput.length - 1));
           }
         }
+    }
+  };
+
+  const handlePoint = (val) => {
+    if (topIsClicked) {
+      if (!topHavePoint) {
+        setTopInput(topInput + val);
+        setTopHavePoint(true);
+      }
+    } else {
+      if (!botHavePoint) {
+        setBottomInput(bottomInput + val);
+        setBotHavePoint(true);
+      }
     }
   };
 
@@ -137,6 +180,7 @@ const ConversionScreen = ({ route, navigation }) => {
               style={{
                 fontSize: 30,
                 color: topIsClicked ? "#F85E18" : "black",
+                textAlign: "right",
               }}
               onPress={() => topIsClicked || setTopIsClicked(!topIsClicked)}
             >
@@ -149,6 +193,7 @@ const ConversionScreen = ({ route, navigation }) => {
               style={{
                 fontSize: 30,
                 color: !topIsClicked ? "#F85E18" : "black",
+                textAlign: "right",
               }}
               onPress={() => topIsClicked && setTopIsClicked(!topIsClicked)}
             >
@@ -173,30 +218,25 @@ const ConversionScreen = ({ route, navigation }) => {
             return (
               <View style={styles.row} key={id}>
                 {item.map((operator, id) => {
-                  return (
-                    operator.type === "number" && (
-                      <View style={styles.outerBtnOperator} key={id}>
-                        <TouchableOpacity
-                          style={styles.btnOperator}
-                          onPress={() =>
-                            handleTap(operator.type, operator.text)
-                          }
+                  return operator.type === "number" ||
+                    operator.type === "point" ? (
+                    <View style={styles.outerBtnOperator} key={id}>
+                      <TouchableOpacity
+                        style={styles.btnOperator}
+                        onPress={() => handleTap(operator.type, operator.text)}
+                      >
+                        <Text
+                          style={{
+                            fontSize: 25,
+                            color:
+                              operator.type === "number" ? "black" : "#F85E18",
+                          }}
                         >
-                          <Text
-                            style={{
-                              fontSize: 25,
-                              color:
-                                operator.type === "number"
-                                  ? "black"
-                                  : "#F85E18",
-                            }}
-                          >
-                            {operator.text}
-                          </Text>
-                        </TouchableOpacity>
-                      </View>
-                    )
-                  );
+                          {operator.text}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  ) : null;
                 })}
               </View>
             );
@@ -205,26 +245,23 @@ const ConversionScreen = ({ route, navigation }) => {
         <View style={styles.modifierContainer}>
           {op.map((item) => {
             return item.map((operator, id) => {
-              return (
-                operator.type !== "number" && (
-                  <View style={styles.outerBtnOperator} key={id}>
-                    <TouchableOpacity
-                      style={styles.btnOperator}
-                      onPress={() => handleTap(operator.type)}
+              return operator.type !== "number" && operator.type !== "point" ? (
+                <View style={styles.outerBtnOperator} key={id}>
+                  <TouchableOpacity
+                    style={styles.btnOperator}
+                    onPress={() => handleTap(operator.type)}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 25,
+                        color: operator.type === "number" ? "black" : "#F85E18",
+                      }}
                     >
-                      <Text
-                        style={{
-                          fontSize: 25,
-                          color:
-                            operator.type === "number" ? "black" : "#F85E18",
-                        }}
-                      >
-                        {operator.text}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                )
-              );
+                      {operator.text}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              ) : null;
             });
           })}
         </View>
@@ -251,7 +288,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 20,
     marginLeft: 20,
-    marginRight: 40,
+    marginRight: 15,
     borderRadius: 100,
     shadowColor: "#b9bac1",
     shadowOffset: {
@@ -280,9 +317,10 @@ const styles = StyleSheet.create({
   },
   txtBtnType: {
     fontSize: 18,
+    padding: 5,
   },
   numContainer: {
-    flex: 1,
+    flex: 1.8,
     paddingVertical: 20,
     justifyContent: "space-around",
   },

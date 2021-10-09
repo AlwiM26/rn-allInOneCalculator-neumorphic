@@ -6,8 +6,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
-  Animated,
-  PanResponder,
 } from "react-native";
 
 const deviceHeight = Dimensions.get("screen").height;

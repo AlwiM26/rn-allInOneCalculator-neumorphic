@@ -471,6 +471,7 @@ const styles = StyleSheet.create({
   },
   txtBtnType: {
     fontSize: 18,
+    padding: 5,
   },
   numContainer: {
     flex: 1,
