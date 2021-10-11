@@ -2,12 +2,12 @@
 
 Calculator apps inspired by the Xiaomi Calculator aps, with basic calculator, BMI calculator and Unit converter with neumorphic style for the button and card.
 
-<img src="./assets/Home.png" width="250">
-<img src="./assets/BMI.png" width="250">
-<img src="./assets/BMIResult.png" width="250">
-<img src="./assets/Other.png" width="250">
-<img src="./assets/Convert.png" width="250">
-<img src="./assets/ConvertOptions.png" width="250">
+<img src="./assets/Home.png" width="150">
+<img src="./assets/BMI.png" width="150">
+<img src="./assets/BMIResult.png" width="150">
+<img src="./assets/Other.png" width="150">
+<img src="./assets/Convert.png" width="150">
+<img src="./assets/ConvertOptions.png" width="150">
 
 ### How to use
 
