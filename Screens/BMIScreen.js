@@ -29,8 +29,6 @@ const BMIScreen = () => {
   let weightModalRef = React.createRef();
   let heightModalRef = React.createRef();
 
-  // useEffect(() => {}, [topInput, bottomInput]);
-
   const op = [
     [
       { text: "7", type: "number" },

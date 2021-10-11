@@ -7,8 +7,8 @@ import BottomModal from "../components/BottomModal";
 const ConversionScreen = ({ route, navigation }) => {
   const { opt } = route.params;
 
-  const [topInput, setTopInput] = useState("1");
-  const [bottomInput, setBottomInput] = useState("1");
+  const [topInput, setTopInput] = useState("0");
+  const [bottomInput, setBottomInput] = useState("0");
 
   const [topIsClicked, setTopIsClicked] = useState(true);
   const [topHavePoint, setTopHavePoint] = useState(false);
@@ -53,14 +53,16 @@ const ConversionScreen = ({ route, navigation }) => {
   useEffect(() => {
     topIsClicked
       ? setBottomInput(
-          convert(+topInput)
-            .from(topUnit.code)
-            .to(bottomUnit.code)
+          "" +
+            convert(+topInput)
+              .from(topUnit.code)
+              .to(bottomUnit.code)
         )
       : setTopInput(
-          convert(+bottomInput)
-            .from(bottomUnit.code)
-            .to(topUnit.code)
+          "" +
+            convert(+bottomInput)
+              .from(bottomUnit.code)
+              .to(topUnit.code)
         );
   }, [topInput, topUnit, bottomInput, bottomUnit]);
 
