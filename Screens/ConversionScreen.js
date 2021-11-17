@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import convert from "convert-units";
 import BottomModal from "../components/BottomModal";
 
-const ConversionScreen = ({ route, navigation }) => {
+const ConversionScreen = ({ route }) => {
   const { opt } = route.params;
 
   const [topInput, setTopInput] = useState("0");

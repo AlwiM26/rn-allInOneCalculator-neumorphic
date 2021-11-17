@@ -67,19 +67,22 @@ const CalculatorScreen = () => {
         setHavePoint(false);
         return handleOperator(val);
       case "number":
-        if (result[0] === "=") {
-          setResult("");
-          setN(val);
-        } else {
-          if (n === "0") {
-            setN(val);
-          } else {
-            setN(n + val);
-          }
-        }
-        break;
+        return handleNumber(val);
     }
   };
+
+  const handleNumber = (val) => {
+    if (result[0] === "=") {
+      setResult("");
+      setN(val);
+    } else {
+      if (n === "0") {
+        setN(val);
+      } else {
+        setN(n + val);
+      }
+    }
+  }
 
   const handleEqual = () => {
     if (result[0] === "=") {
